@@ -1,6 +1,6 @@
 """
-Módulo B: Lógica de Teoría de Números
-Responsable: José (Rama: jose)
+Lógica de Teoría de Números
+Operaciones fundamentales: primalidad, Algoritmo de Euclides, MCM y congruencias modulares.
 """
 
 import math
@@ -110,4 +110,3 @@ def verificar_congruencia(a: int, b: int, m: int):
         "cociente_dif": cociente_dif,
         "explicacion": explicacion
     }
-

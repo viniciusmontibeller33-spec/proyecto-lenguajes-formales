@@ -81,6 +81,8 @@ if entrada:
     st.subheader("Frecuencia de Caracteres")
     df_freq = pd.DataFrame(list(datos["frecuencias"].items()), columns=["Carácter", "Frecuencia"]).sort_values(by="Frecuencia", ascending=False)
     st.dataframe(df_freq, hide_index=True, use_container_width=True)
+else:
+    st.info("Escribe o pega texto arriba para ver el análisis de métricas, palíndromos y frecuencias.")
 
 st.markdown("---")
 with st.expander("¿Qué conceptos estoy aprendiendo en este módulo?"):

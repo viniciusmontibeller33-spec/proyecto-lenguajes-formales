@@ -1,5 +1,5 @@
-"""Operaciones del módulo A de StringLab, independientes de Streamlit.
-Responsable: Sergio (Rama: sergio)
+"""
+Operaciones de Análisis de Cadenas de StringLab.
 """
 
 from collections import Counter

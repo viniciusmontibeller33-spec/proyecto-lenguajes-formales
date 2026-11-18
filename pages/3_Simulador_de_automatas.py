@@ -63,27 +63,34 @@ st.markdown("---")
 # 3. Gestión de Estado y Entrada de Cadena
 st.subheader("Entrada de Cadena")
 
-# Inicialización segura de estado
+cad_inicial = "1101" if afd.id_automata == "termina_01" else "110"
+
 if "cadena_actual" not in st.session_state:
-    st.session_state.cadena_actual = "1101" if afd.id_automata == "termina_01" else "110"
+    st.session_state.cadena_actual = cad_inicial
 if "paso_actual" not in st.session_state:
     st.session_state.paso_actual = 0
 if "ultimo_afd" not in st.session_state:
     st.session_state.ultimo_afd = afd.id_automata
+if "txt_input_widget" not in st.session_state:
+    st.session_state.txt_input_widget = st.session_state.cadena_actual
 
-# Reinicio si cambia de autómata
+# Reinicio seguro si cambia el autómata seleccionado
 if st.session_state.ultimo_afd != afd.id_automata:
-    st.session_state.cadena_actual = "1101" if afd.id_automata == "termina_01" else "110"
+    st.session_state.cadena_actual = cad_inicial
     st.session_state.paso_actual = 0
     st.session_state.ultimo_afd = afd.id_automata
+    st.session_state.txt_input_widget = cad_inicial
+    if "slider_pasos_sync" in st.session_state:
+        st.session_state.slider_pasos_sync = 0
 
 def aplicar_ejemplo(cad):
     st.session_state.cadena_actual = cad
     st.session_state.paso_actual = 0
+    st.session_state.txt_input_widget = cad
     if "slider_pasos_sync" in st.session_state:
         st.session_state.slider_pasos_sync = 0
 
-# Botones de ejemplos predefinidos
+# Botones de ejemplos sugeridos con sincronización completa
 st.write("**Ejemplos sugeridos para evaluar con un clic:**")
 cols_ejemplos = st.columns(len(afd.ejemplos_sugeridos))
 for idx, ej in enumerate(afd.ejemplos_sugeridos):
@@ -131,7 +138,7 @@ else:
         
     paso_actual = st.session_state.paso_actual
 
-    # Callbacks para los botones de control (100% confiables)
+    # Callbacks para los botones de control
     def ir_inicio():
         st.session_state.paso_actual = 0
         st.session_state.slider_pasos_sync = 0
@@ -164,13 +171,18 @@ else:
     b5.button("Reiniciar", on_click=ir_inicio, use_container_width=True)
 
     if total_pasos > 0:
+        # Clamping de seguridad para evitar desbordamiento del slider
         if "slider_pasos_sync" not in st.session_state:
             st.session_state.slider_pasos_sync = paso_actual
+        if st.session_state.slider_pasos_sync > total_pasos:
+            st.session_state.slider_pasos_sync = total_pasos
+        if st.session_state.slider_pasos_sync < 0:
+            st.session_state.slider_pasos_sync = 0
+
         st.slider(
             "Progreso de lectura de la cinta:",
             min_value=0,
             max_value=total_pasos,
-            value=paso_actual,
             key="slider_pasos_sync",
             on_change=on_slider_move
         )

@@ -1,6 +1,8 @@
 """
-Módulo D: Lógica de Cifrado Educativo (César Modular)
-Responsable: José (Rama: jose)
+Lógica de Cifrado Educativo (César Modular)
+Implementa transformaciones en el anillo cíclico Z26:
+    C = (P + K) mod 26
+    P = (C - K) mod 26
 """
 
 ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

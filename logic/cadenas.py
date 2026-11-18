@@ -1,71 +1,85 @@
-"""
-Módulo A: Lógica del Analizador de Cadenas
-Responsable: Sergio (Rama: sergio)
-"""
+"""Operaciones del módulo A de StringLab, independientes de Streamlit."""
 
 from collections import Counter
-import re
 import unicodedata
 
-def analizar_cadena(texto: str):
-    """
-    Analiza una cadena de texto y retorna estadísticas básicas.
-    """
-    total_con_espacios = len(texto)
-    total_sin_espacios = len(texto.replace(" ", ""))
-    
-    letras = sum(1 for c in texto if c.isalpha())
-    digitos = sum(1 for c in texto if c.isdigit())
-    espacios = sum(1 for c in texto if c.isspace())
-    simbolos = total_con_espacios - (letras + digitos + espacios)
-    
-    vocales = sum(1 for c in texto.lower() if c in "aeiouáéíóúü")
-    consonantes = sum(1 for c in texto.lower() if c.isalpha() and c not in "aeiouáéíóúü")
-    
-    frecuencias = dict(Counter(texto))
-    
-    return {
-        "total_con_espacios": total_con_espacios,
-        "total_sin_espacios": total_sin_espacios,
-        "letras": letras,
-        "vocales": vocales,
-        "consonantes": consonantes,
-        "digitos": digitos,
-        "espacios": espacios,
-        "simbolos": simbolos,
-        "frecuencias": frecuencias
-    }
 
-def es_palindromo(texto: str):
-    """
-    Comprueba si una cadena es palíndromo ignorando mayúsculas, espacios y signos.
-    """
-    if not texto.strip():
-        return False, "", "Cadena vacía"
-        
-    # Normalizar quitando acentos y signos
-    texto_norm = unicodedata.normalize('NFD', texto)
-    texto_limpio = ''.join(c.lower() for c in texto_norm if c.isalnum())
-    
-    invertido = texto_limpio[::-1]
-    es_igual = (texto_limpio == invertido) and len(texto_limpio) > 0
-    
-    return es_igual, texto_limpio, invertido
+def analizar_cadena(texto):
+    """Cuenta caracteres; espacios incluye tabulaciones y saltos de línea.
 
-def buscar_subcadena(texto: str, patron: str):
+    Cada carácter ocupa una sola categoría. El total usa los puntos de código
+    de Python, por lo que un emoji compuesto puede ocupar varias posiciones.
     """
-    Busca todas las apariciones de una subcadena e indica sus posiciones (1-based e 0-based).
+    conteo = dict(letras=0, vocales=0, consonantes=0, digitos=0,
+                  espacios=0, simbolos=0)
+    for caracter in texto:
+        if caracter.isalpha():
+            conteo['letras'] += 1
+            base = unicodedata.normalize('NFD', caracter.casefold())[0]
+            if base in 'aeiou':
+                conteo['vocales'] += 1
+            else:
+                conteo['consonantes'] += 1
+        elif caracter.isdigit():
+            conteo['digitos'] += 1
+        elif caracter.isspace():
+            conteo['espacios'] += 1
+        else:
+            conteo['simbolos'] += 1
+    return {'total': len(texto), 'sin_espacios': len(texto) - conteo['espacios'],
+            'espacios_simples': texto.count(' '), **conteo}
+
+
+def frecuencia_caracteres(texto):
+    """Frecuencias exactas, ordenadas de mayor a menor y luego por carácter."""
+    return dict(sorted(Counter(texto).items(), key=lambda par: (-par[1], par[0])))
+
+
+def verificar_palindromo(texto):
+    """Ignora mayúsculas, blancos y signos; conserva acentos y dígitos.
+
+    NFC unifica acentos compuestos y descompuestos. Una entrada sin letras
+    ni dígitos se considera no evaluable (es_palindromo=False).
     """
-    if not patron or not texto:
-        return []
-        
-    posiciones = []
-    inicio = 0
-    while True:
-        pos = texto.find(patron, inicio)
-        if pos == -1:
+    normalizado = unicodedata.normalize('NFC', texto).casefold()
+    normalizado = ''.join(c for c in normalizado if c.isalnum())
+    pasos = []
+    izquierda, derecha = 0, len(normalizado) - 1
+    while izquierda < derecha:
+        iguales = normalizado[izquierda] == normalizado[derecha]
+        pasos.append({'Paso': len(pasos) + 1, 'Índice izquierdo': izquierda,
+                      'Carácter izquierdo': normalizado[izquierda],
+                      'Índice derecho': derecha,
+                      'Carácter derecho': normalizado[derecha],
+                      'Resultado': 'Iguales' if iguales else 'Diferentes'})
+        if not iguales:
             break
-        posiciones.append(pos)
-        inicio = pos + 1
-        
-    return posiciones
+        izquierda += 1
+        derecha -= 1
+    return {'normalizado': normalizado, 'invertido': normalizado[::-1],
+            'evaluable': bool(normalizado),
+            'es_palindromo': bool(normalizado) and normalizado == normalizado[::-1],
+            'pasos': pasos}
+
+
+def buscar_subcadena(texto, subcadena):
+    """Búsqueda directa, sensible a mayúsculas, con coincidencias solapadas.
+
+    Las posiciones empiezan en cero y corresponden siempre al texto original.
+    El patrón vacío se rechaza para evitar resultados ambiguos en la interfaz.
+    """
+    if not subcadena:
+        raise ValueError('Escribí una subcadena no vacía.')
+    posiciones = []
+    comparaciones = 0
+    for inicio in range(len(texto) - len(subcadena) + 1):
+        coincide = True
+        for desplazamiento, caracter in enumerate(subcadena):
+            comparaciones += 1
+            if texto[inicio + desplazamiento] != caracter:
+                coincide = False
+                break
+        if coincide:
+            posiciones.append(inicio)
+    return {'posiciones': posiciones, 'ocurrencias': len(posiciones),
+            'comparaciones': comparaciones}

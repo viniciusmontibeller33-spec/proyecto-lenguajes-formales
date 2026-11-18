@@ -1,47 +1,69 @@
-/* Estilos generales para StringLab - Paleta Celeste y Blanco */
+/* ==========================================================================
+   StringLab — Hoja de Estilos Visuales
+   Paleta: Celeste y Blanco (Fondo claro, diseño académico limpio)
+   Responsable: Vini
+   ========================================================================== */
 
 :root {
-    --primary-color: #0284c7;
-    --primary-light: #e0f2fe;
-    --primary-hover: #0369a1;
-    --text-dark: #0f172a;
-    --text-muted: #475569;
-    --bg-card: #ffffff;
-    --border-card: #bae6fd;
+    --primary-main: #0284c7;        /* Celeste principal */
+    --primary-light: #e0f2fe;       /* Fondo celeste suave */
+    --primary-hover: #0369a1;       /* Celeste oscuro */
+    --accent-cyan: #38bdf8;         /* Cyan brillante para estado activo */
+    --text-dark: #0f172a;           /* Texto principal oscuro */
+    --text-muted: #475569;          /* Texto secundario */
+    --bg-card: #ffffff;             /* Fondo de tarjeta blanco */
+    --border-card: #bae6fd;         /* Borde celeste claro */
 }
 
-/* Encabezados y títulos */
-h1, h2, h3 {
-    color: #0369a1 !important;
+/* Tipografía de encabezados */
+h1, h2, h3, h4 {
+    color: var(--primary-hover) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-weight: 700;
 }
 
-/* Tarjetas de contenido */
+/* Tarjetas de módulos y contenedores */
 .card-box {
     background-color: var(--bg-card);
     border: 1px solid var(--border-card);
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 1.25rem;
     margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.06);
+    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Resaltado de pasos y conceptos */
-.step-highlight {
-    background-color: #f0f9ff;
-    border-left: 4px solid var(--primary-color);
-    padding: 0.75rem 1rem;
-    margin: 0.5rem 0;
-    border-radius: 0 8px 8px 0;
+.card-box:hover {
+    box-shadow: 0 4px 8px rgba(2, 132, 199, 0.12);
 }
 
-/* Badges educativos */
+/* Insignias y etiquetas educativas */
 .badge-edu {
-    background-color: #e0f2fe;
-    color: #0369a1;
-    padding: 4px 10px;
-    border-radius: 9999px;
+    background-color: var(--primary-light);
+    color: var(--primary-hover);
+    padding: 4px 12px;
+    border-radius: 12px;
     font-size: 0.85rem;
     font-weight: 600;
     display: inline-block;
+    border: 1px solid #7dd3fc;
+}
+
+/* Resaltado de pasos y cinta */
+.tape-cell {
+    display: inline-block;
+    padding: 6px 12px;
+    font-family: monospace;
+    font-size: 1.2rem;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+.tape-cell-active {
+    background-color: var(--accent-cyan) !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    border-color: var(--primary-main) !important;
 }

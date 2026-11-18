@@ -12,8 +12,10 @@ ENV/
 # Streamlit config / cache
 .streamlit/secrets.toml
 
-# IDEs
-.vscode/
+# IDEs (se conservan launch y settings para VS Code)
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
 .idea/
 
 # OS generated

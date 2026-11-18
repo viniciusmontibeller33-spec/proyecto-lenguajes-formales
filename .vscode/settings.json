@@ -1,0 +1,8 @@
+{
+    "python.defaultInterpreterPath": "${env:LOCALAPPDATA}\\Programs\\Python\\Python313\\python.exe",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}"
+    ],
+    "files.encoding": "utf8",
+    "editor.formatOnSave": true
+}

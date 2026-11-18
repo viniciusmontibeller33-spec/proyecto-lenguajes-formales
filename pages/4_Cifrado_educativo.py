@@ -17,11 +17,33 @@ st.markdown("---")
 
 st.warning("Nota didáctica: Este módulo utiliza el alfabeto estándar de 26 letras en inglés (A-Z, sin letra Ñ) para ejemplificar la aritmética módulo 26. Los signos y espacios se conservan intactos. Este método es estrictamente educativo y no debe usarse para proteger información sensible.")
 
-modo = st.radio("Selecciona la operación:", ["Cifrar Mensaje", "Descifrar Mensaje"], horizontal=True)
+# 1. Preservar el mensaje en session_state para que no se reinicie a 'HOLA MUNDO'
+if "mensaje_cifrado" not in st.session_state:
+    st.session_state.mensaje_cifrado = "HOLA MUNDO"
+
+modo = st.radio(
+    "Selecciona la operación:",
+    ["Cifrar Mensaje", "Descifrar Mensaje"],
+    horizontal=True,
+    key="radio_modo_cifrado"
+)
 
 col_txt, col_k = st.columns([3, 1])
-mensaje_input = col_txt.text_input("Mensaje a procesar:", value="HOLA MUNDO" if modo == "Cifrar Mensaje" else "KROD PXQGR")
-clave_k = col_k.slider("Clave de desplazamiento (K):", min_value=1, max_value=25, value=3)
+
+def on_texto_change():
+    st.session_state.mensaje_cifrado = st.session_state.input_texto_cifrado
+
+mensaje_input = col_txt.text_input(
+    "Mensaje a procesar:",
+    value=st.session_state.mensaje_cifrado,
+    key="input_texto_cifrado",
+    on_change=on_texto_change
+)
+
+# Mantener sincronizado el texto actual
+st.session_state.mensaje_cifrado = mensaje_input
+
+clave_k = col_k.slider("Clave de desplazamiento (K):", min_value=1, max_value=25, value=3, key="slider_clave_k")
 
 # Visualización comparativa de alfabetos
 st.subheader("Mapeo de Alfabetos")
@@ -45,6 +67,14 @@ else:
     resultado, pasos = descifrar_cesar_paso_a_paso(mensaje_input, clave_k)
     st.success(f"**Texto Descifrado:** `{resultado}`")
     st.markdown(f"**Fórmula aplicada:** $P = (C - {clave_k}) \\pmod{{26}}$")
+
+# Botón utilitario para transferir el resultado de nuevo al campo de texto
+col_copiar, _ = st.columns([1, 3])
+def transferir_resultado():
+    st.session_state.mensaje_cifrado = resultado
+    st.session_state.input_texto_cifrado = resultado
+
+col_copiar.button("Copiar resultado al campo de entrada", on_click=transferir_resultado)
 
 if pasos:
     st.write("Tabla de transformaciones carácter por carácter:")

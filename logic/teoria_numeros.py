@@ -74,3 +74,40 @@ def operacion_modulo_explicada(dividendo: int, divisor: int):
     explicacion = f"{dividendo} mod {divisor} = {residuo} (ya que {dividendo} = {divisor} × {cociente} + {residuo})"
     
     return residuo, cociente, explicacion
+
+def verificar_congruencia(a: int, b: int, m: int):
+    """
+    Verifica si dos números a y b son congruentes módulo m: a ≡ b (mod m).
+    Retorna el resultado booleano, residuos y una explicación paso a paso.
+    """
+    if m <= 0:
+        raise ValueError("El módulo m debe ser un entero positivo mayor que cero.")
+        
+    res_a = a % m
+    res_b = b % m
+    diferencia = a - b
+    es_congruente = (res_a == res_b)
+    cociente_dif = diferencia // m
+    resto_dif = diferencia % m
+    
+    explicacion = (
+        f"¿Es {a} ≡ {b} (mod {m})? -> {'SÍ, son congruentes' if es_congruente else 'NO son congruentes'}.\n"
+        f"• {a} mod {m} = {res_a}\n"
+        f"• {b} mod {m} = {res_b}\n"
+        f"• Diferencia: a - b = {a} - ({b}) = {diferencia}\n"
+        f"• Criterio de divisibilidad: {m} {'divide exactamente a ' if es_congruente else 'NO divide exactamente a '}{diferencia} "
+        f"({diferencia} = {m} × {cociente_dif} + {resto_dif})."
+    )
+    
+    return {
+        "es_congruente": es_congruente,
+        "a": a,
+        "b": b,
+        "m": m,
+        "res_a": res_a,
+        "res_b": res_b,
+        "diferencia": diferencia,
+        "cociente_dif": cociente_dif,
+        "explicacion": explicacion
+    }
+

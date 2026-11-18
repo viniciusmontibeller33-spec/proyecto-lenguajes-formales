@@ -1,15 +1,21 @@
 import streamlit as st
 import pandas as pd
-from logic.cifrado import cifrar_cesar_paso_a_paso, descifrar_cesar_paso_a_paso, obtener_alfabeto_desplazado, ALFABETO
+from logic.cifrado import cifrar_cesar_paso_a_paso, descifrar_cesar_paso_a_paso, obtener_alfabeto_desplazado
 
-st.set_page_config(page_title="Módulo D: Cifrado Educativo | StringLab", page_icon="🔐", layout="wide")
+st.set_page_config(page_title="Módulo D: Cifrado Educativo | StringLab", layout="wide")
 
-st.title("🔐 Módulo D: Cifrado Educativo (César Modular)")
-st.markdown("**Responsable:** José (`rama: jose`)")
+# Cargar estilos visuales
+try:
+    with open("assets/styles.css", "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except Exception:
+    pass
+
+st.title("Módulo D: Cifrado Educativo (César Modular)")
 st.caption("Aprende cómo la aritmética modular transforma caracteres en el cifrado clásico de sustitución.")
 st.markdown("---")
 
-st.warning("⚠️ **Nota didáctica:** Este módulo utiliza el alfabeto estándar de 26 letras en inglés ($A-Z$, sin letra Ñ) para ejemplificar la aritmética módulo 26. Los signos y espacios se conservan intactos. Este método es estrictamente educativo y no debe usarse para proteger información sensible.")
+st.warning("Nota didáctica: Este módulo utiliza el alfabeto estándar de 26 letras en inglés (A-Z, sin letra Ñ) para ejemplificar la aritmética módulo 26. Los signos y espacios se conservan intactos. Este método es estrictamente educativo y no debe usarse para proteger información sensible.")
 
 modo = st.radio("Selecciona la operación:", ["Cifrar Mensaje", "Descifrar Mensaje"], horizontal=True)
 
@@ -18,7 +24,7 @@ mensaje_input = col_txt.text_input("Mensaje a procesar:", value="HOLA MUNDO" if 
 clave_k = col_k.slider("Clave de desplazamiento (K):", min_value=1, max_value=25, value=3)
 
 # Visualización comparativa de alfabetos
-st.subheader("🔤 Mapeo de Alfabetos")
+st.subheader("Mapeo de Alfabetos")
 orig, desp = obtener_alfabeto_desplazado(clave_k)
 
 df_alf = pd.DataFrame({
@@ -29,7 +35,7 @@ df_alf = pd.DataFrame({
 st.dataframe(df_alf.T, use_container_width=True)
 
 st.markdown("---")
-st.subheader("⚙️ Procesamiento y Procedimiento Paso a Paso")
+st.subheader("Procesamiento y Procedimiento Paso a Paso")
 
 if modo == "Cifrar Mensaje":
     resultado, pasos = cifrar_cesar_paso_a_paso(mensaje_input, clave_k)
@@ -46,7 +52,7 @@ if pasos:
     st.dataframe(df_pasos, hide_index=True, use_container_width=True)
 
 st.markdown("---")
-with st.expander("🎓 ¿Qué conceptos estoy aprendiendo en este módulo?"):
+with st.expander("¿Qué conceptos estoy aprendiendo en este módulo?"):
     st.markdown("""
     * **Transductores Finitos:** Un cifrado de sustitución puede verse formalmente como una Máquina de Mealy o transductor finito que lee un símbolo de entrada $P$ y emite un símbolo $C$ según una función de salida.
     * **Aritmética en Anillos Finitos ($\mathbb{Z}_{26}$):** Las letras se mapean biyectivamente a números entre $0$ y $25$. La suma y resta modular garantizan que el resultado siempre vuelva a caer dentro del alfabeto (operación cerrada).

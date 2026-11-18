@@ -1,69 +1,95 @@
 /* ==========================================================================
-   StringLab — Hoja de Estilos Visuales
-   Paleta: Celeste y Blanco (Fondo claro, diseño académico limpio)
-   Responsable: Vini
+   StringLab - Hoja de Estilos Visuales
+   Paleta: Celeste y Blanco / Tema Adaptable
    ========================================================================== */
 
 :root {
-    --primary-main: #0284c7;        /* Celeste principal */
-    --primary-light: #e0f2fe;       /* Fondo celeste suave */
-    --primary-hover: #0369a1;       /* Celeste oscuro */
-    --accent-cyan: #38bdf8;         /* Cyan brillante para estado activo */
-    --text-dark: #0f172a;           /* Texto principal oscuro */
-    --text-muted: #475569;          /* Texto secundario */
-    --bg-card: #ffffff;             /* Fondo de tarjeta blanco */
-    --border-card: #bae6fd;         /* Borde celeste claro */
+    --primary-main: #0284c7;
+    --primary-light: #e0f2fe;
+    --primary-hover: #0369a1;
+    --accent-cyan: #38bdf8;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --bg-card: #1e293b;
+    --border-card: #0284c7;
 }
 
-/* Tipografía de encabezados */
+/* Tipografia de encabezados */
 h1, h2, h3, h4 {
-    color: var(--primary-hover) !important;
+    color: #38bdf8 !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-weight: 700;
 }
 
-/* Tarjetas de módulos y contenedores */
+/* Tarjetas de modulos y contenedores */
 .card-box {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: 10px;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.05);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background-color: #1e293b !important;
+    border: 1.5px solid #0284c7 !important;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .card-box:hover {
-    box-shadow: 0 4px 8px rgba(2, 132, 199, 0.12);
+    border-color: #38bdf8 !important;
+    transform: translateY(-2px);
 }
 
-/* Insignias y etiquetas educativas */
-.badge-edu {
-    background-color: var(--primary-light);
-    color: var(--primary-hover);
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    display: inline-block;
-    border: 1px solid #7dd3fc;
+.card-box h3 {
+    color: #38bdf8 !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.6rem !important;
 }
 
-/* Resaltado de pasos y cinta */
-.tape-cell {
-    display: inline-block;
-    padding: 6px 12px;
+.card-box p {
+    color: #f1f5f9 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    opacity: 0.95;
+}
+
+/* Estilo para cinta de entrada en automatas */
+.tape-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px;
+    background-color: #0f172a;
+    border: 1.5px solid #334155;
+    border-radius: 8px;
     font-family: monospace;
-    font-size: 1.2rem;
-    background-color: #f8fafc;
-    border: 1px solid #cbd5e1;
-    margin: 2px;
-    border-radius: 4px;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.tape-cell-done {
+    padding: 4px 12px;
+    background-color: #1e293b;
+    color: #38bdf8;
+    border-radius: 6px;
+    border: 1px solid #0284c7;
+    font-weight: bold;
 }
 
 .tape-cell-active {
-    background-color: var(--accent-cyan) !important;
-    color: #ffffff !important;
+    padding: 4px 12px;
+    background-color: #0284c7;
+    color: #ffffff;
+    border-radius: 6px;
+    border: 2px solid #38bdf8;
     font-weight: bold;
-    border-color: var(--primary-main) !important;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.tape-cell-pending {
+    padding: 4px 12px;
+    background-color: #1e293b;
+    color: #64748b;
+    border-radius: 6px;
+    border: 1px solid #334155;
 }

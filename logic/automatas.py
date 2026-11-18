@@ -1,6 +1,5 @@
 """
 Módulo C: Lógica de Autómatas Finitos Deterministas (AFD)
-Responsable: Vini (Rama: vini)
 
 Este módulo implementa la definición formal de Autómatas Finitos Deterministas
 según la teoría de Lenguajes Formales:
@@ -84,7 +83,7 @@ class AFD:
                 "aceptada": aceptada,
                 "mensaje": (
                     f"Cadena vacía (λ) evaluada en el estado inicial '{estado_actual}'. "
-                    f"{'¡Cadena ACEPTADA! (El estado inicial q₀ pertenece a los estados de aceptación F).' if aceptada else 'Cadena RECHAZADA (El estado inicial q₀ no pertenece a F).'}"
+                    f"{'Cadena ACEPTADA (El estado inicial q₀ pertenece al conjunto de aceptación F).' if aceptada else 'Cadena RECHAZADA (El estado inicial q₀ no pertenece a F).'}"
                 )
             }
 
@@ -94,7 +93,6 @@ class AFD:
             estado_destino = self.transiciones.get((estado_origen, char))
             
             if estado_destino is None:
-                # Transición no definida (para autómatas no totales)
                 return {
                     "exito": False,
                     "error": f"Transición no definida para el estado '{estado_origen}' con el símbolo '{char}' en la posición {idx + 1}.",
@@ -125,7 +123,7 @@ class AFD:
             "aceptada": aceptada,
             "mensaje": (
                 f"La computación finalizó en el estado '{estado_actual}'. "
-                f"{'✅ ¡Cadena ACEPTADA! Pertenece al lenguaje reconocido.' if aceptada else '❌ Cadena RECHAZADA. El estado final no pertenece a F.'}"
+                f"{'Cadena ACEPTADA. Pertenece al lenguaje formal reconocido.' if aceptada else 'Cadena RECHAZADA. El estado final no pertenece a F.'}"
             )
         }
 
@@ -137,8 +135,8 @@ class AFD:
         filas = []
 
         for estado in self.estados:
-            marca_inicial = "➔ " if estado == self.estado_inicial else ""
-            marca_final = "★ " if estado in self.estados_aceptacion else ""
+            marca_inicial = "-> " if estado == self.estado_inicial else ""
+            marca_final = "* " if estado in self.estados_aceptacion else ""
             etiqueta_estado = f"{marca_inicial}{marca_final}{estado}"
 
             fila = {"Estado": etiqueta_estado, "Identificador": estado}
@@ -165,13 +163,13 @@ class AFD:
             '  rankdir=LR;',
             '  size="9,5";',
             '  bgcolor="transparent";',
-            '  node [fontname="Helvetica", shape=circle, style="filled", fillcolor="#ffffff", color="#0284c7", penwidth=1.5, fontsize=12];',
-            '  edge [fontname="Helvetica", color="#64748b", fontcolor="#0f172a", penwidth=1.2, fontsize=11, arrowsize=0.8];'
+            '  node [fontname="Helvetica, Arial, sans-serif", shape=circle, style="filled", fillcolor="#ffffff", color="#0284c7", penwidth=2.0, fontsize=13, fontcolor="#0f172a"];',
+            '  edge [fontname="Helvetica, Arial, sans-serif", color="#64748b", fontcolor="#94a3b8", penwidth=1.5, fontsize=12, arrowsize=0.85];'
         ]
 
         # Flecha de entrada al estado inicial
         dot.append('  __start [shape=none, label="", width=0, height=0];')
-        dot.append(f'  __start -> {self.estado_inicial} [label=" inicio", color="#0284c7", penwidth=1.8];')
+        dot.append(f'  __start -> {self.estado_inicial} [label=" inicio", color="#38bdf8", fontcolor="#38bdf8", penwidth=2.2];')
 
         # Definición visual de cada nodo
         for estado in self.estados:
@@ -179,16 +177,21 @@ class AFD:
             shape = "doublecircle" if es_aceptacion else "circle"
 
             if estado == estado_activo:
-                # Estado activo en el paso actual (resaltado en celeste vibrante)
-                fillcolor = "#38bdf8"
-                color = "#0369a1"
+                # Estado activo en el paso actual (resaltado en celeste vibrante con borde cyan)
+                fillcolor = "#0284c7"
+                color = "#38bdf8"
                 fontcolor = "#ffffff"
-                penwidth = 2.8
+                penwidth = 3.2
+            elif es_aceptacion:
+                fillcolor = "#e0f2fe"
+                color = "#0284c7"
+                fontcolor = "#0369a1"
+                penwidth = 2.4
             else:
-                fillcolor = "#e0f2fe" if es_aceptacion else "#ffffff"
+                fillcolor = "#ffffff"
                 color = "#0284c7"
                 fontcolor = "#0f172a"
-                penwidth = 2.0 if es_aceptacion else 1.2
+                penwidth = 1.8
 
             dot.append(
                 f'  {estado} [shape={shape}, fillcolor="{fillcolor}", color="{color}", '
@@ -211,15 +214,15 @@ class AFD:
                     es_arista_activa = True
 
             if es_arista_activa:
-                color_edge = "#0284c7"
-                color_font = "#0369a1"
-                penwidth_edge = 2.8
-                arrowsize = 1.1
+                color_edge = "#38bdf8"
+                color_font = "#38bdf8"
+                penwidth_edge = 3.2
+                arrowsize = 1.15
             else:
-                color_edge = "#94a3b8"
-                color_font = "#334155"
-                penwidth_edge = 1.3
-                arrowsize = 0.8
+                color_edge = "#64748b"
+                color_font = "#94a3b8"
+                penwidth_edge = 1.5
+                arrowsize = 0.85
 
             dot.append(
                 f'  {origen} -> {destino} [label=" {simbolos_str} ", color="{color_edge}", '

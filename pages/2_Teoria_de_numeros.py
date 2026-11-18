@@ -2,14 +2,20 @@ import streamlit as st
 import pandas as pd
 from logic.teoria_numeros import es_primo_paso_a_paso, mcd_euclides_paso_a_paso, mcm_con_explicacion, operacion_modulo_explicada, verificar_congruencia
 
-st.set_page_config(page_title="Módulo B: Teoría de Números | StringLab", page_icon="🔢", layout="wide")
+st.set_page_config(page_title="Módulo B: Teoría de Números | StringLab", layout="wide")
 
-st.title("🔢 Módulo B: Laboratorio de Teoría de Números")
-st.markdown("**Responsable:** José (`rama: jose`)")
+# Cargar estilos visuales
+try:
+    with open("assets/styles.css", "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except Exception:
+    pass
+
+st.title("Módulo B: Laboratorio de Teoría de Números")
 st.caption("Operaciones fundamentales paso a paso: números primos, Algoritmo de Euclides, MCM y aritmética modular.")
 st.markdown("---")
 
-tab1, tab2, tab3, tab4 = st.tabs(["🔍 Números Primos", "📐 MCD (Algoritmo de Euclides)", "🔄 MCM", "➗ Aritmética Modular"])
+tab1, tab2, tab3, tab4 = st.tabs(["Números Primos", "MCD (Algoritmo de Euclides)", "MCM", "Aritmética Modular"])
 
 with tab1:
     st.subheader("Test de Primalidad Paso a Paso")
@@ -17,9 +23,9 @@ with tab1:
     if st.button("Evaluar Primalidad"):
         es_p, divisores, msj = es_primo_paso_a_paso(num_primo)
         if es_p:
-            st.success(f"✅ {msj}")
+            st.success(f"{msj}")
         else:
-            st.warning(f"❌ {msj}")
+            st.warning(f"{msj}")
             
         if divisores:
             st.write("Divisores evaluados hasta $\\lfloor\\sqrt{n}\\rfloor$:")
@@ -79,9 +85,9 @@ with tab4:
     if st.button("Evaluar Congruencia"):
         res_cong = verificar_congruencia(cong_a, cong_b, cong_m)
         if res_cong["es_congruente"]:
-            st.success(f"✅ **¡Verdadero!** ${cong_a} \\equiv {cong_b} \\pmod{{{cong_m}}}$")
+            st.success(f"**Verdadero:** ${cong_a} \\equiv {cong_b} \\pmod{{{cong_m}}}$")
         else:
-            st.error(f"❌ **Falso:** ${cong_a} \\not\\equiv {cong_b} \\pmod{{{cong_m}}}$")
+            st.error(f"**Falso:** ${cong_a} \\not\\equiv {cong_b} \\pmod{{{cong_m}}}$")
             
         st.markdown(f"""
         **Demostración paso a paso:**
@@ -92,7 +98,7 @@ with tab4:
         """)
 
 st.markdown("---")
-with st.expander("🎓 ¿Qué conceptos estoy aprendiendo en este módulo?"):
+with st.expander("¿Qué conceptos estoy aprendiendo en este módulo?"):
     st.markdown("""
     * **Divisibilidad y Estructuras Discretas:** La divisibilidad establece relaciones de equivalencia en el conjunto de los enteros $\\mathbb{Z}$.
     * **Algoritmo de Euclides:** Es uno de los algoritmos formales más antiguos de la humanidad ($O(\\log(\\min(a, b)))$).

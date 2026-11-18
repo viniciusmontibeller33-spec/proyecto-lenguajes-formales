@@ -1,0 +1,74 @@
+import streamlit as st
+import pandas as pd
+from logic.teoria_numeros import es_primo_paso_a_paso, mcd_euclides_paso_a_paso, mcm_con_explicacion, operacion_modulo_explicada
+
+st.set_page_config(page_title="Módulo B: Teoría de Números | StringLab", page_icon="🔢", layout="wide")
+
+st.title("🔢 Módulo B: Laboratorio de Teoría de Números")
+st.markdown("**Responsable:** José (`rama: jose`)")
+st.caption("Operaciones fundamentales paso a paso: números primos, Algoritmo de Euclides, MCM y aritmética modular.")
+st.markdown("---")
+
+tab1, tab2, tab3, tab4 = st.tabs(["🔍 Números Primos", "📐 MCD (Algoritmo de Euclides)", "🔄 MCM", "➗ Aritmética Modular"])
+
+with tab1:
+    st.subheader("Test de Primalidad Paso a Paso")
+    num_primo = st.number_input("Ingresa un número entero positivo:", min_value=1, max_value=1000000, value=29)
+    if st.button("Evaluar Primalidad"):
+        es_p, divisores, msj = es_primo_paso_a_paso(num_primo)
+        if es_p:
+            st.success(f"✅ {msj}")
+        else:
+            st.warning(f"❌ {msj}")
+            
+        if divisores:
+            st.write("Divisores evaluados hasta $\\lfloor\\sqrt{n}\\rfloor$:")
+            df_div = pd.DataFrame(divisores, columns=["Divisor probado (d)", "Residuo (n % d)"])
+            st.dataframe(df_div, hide_index=True)
+
+with tab2:
+    st.subheader("Máximo Común Divisor (MCD) por Algoritmo de Euclides")
+    col_a, col_b = st.columns(2)
+    a_mcd = col_a.number_input("Número A:", min_value=1, value=252)
+    b_mcd = col_b.number_input("Número B:", min_value=1, value=105)
+    
+    if st.button("Calcular MCD"):
+        mcd_res, pasos = mcd_euclides_paso_a_paso(a_mcd, b_mcd)
+        st.success(f"**Resultado:** $\\text{{MCD}}({a_mcd}, {b_mcd}) = {mcd_res}$")
+        st.write("Tabla de divisiones sucesivas:")
+        df_pasos = pd.DataFrame(pasos)
+        st.dataframe(df_pasos[["dividendo", "divisor", "cociente", "residuo", "ecuacion"]], hide_index=True)
+
+with tab3:
+    st.subheader("Mínimo Común Múltiplo (MCM)")
+    col_x, col_y = st.columns(2)
+    x_mcm = col_x.number_input("Primer número:", min_value=1, value=12)
+    y_mcm = col_y.number_input("Segundo número:", min_value=1, value=18)
+    
+    if st.button("Calcular MCM"):
+        mcm_val, mcd_val, expl = mcm_con_explicacion(x_mcm, y_mcm)
+        st.success(f"**Resultado:** $\\text{{MCM}}({x_mcm}, {y_mcm}) = {mcm_val}$")
+        st.info(f"**Fórmula aplicada:** {expl}")
+
+with tab4:
+    st.subheader("Operación Residuo / Módulo y Congruencias")
+    col_d, col_m = st.columns(2)
+    dividendo = col_d.number_input("Dividendo (a):", value=17)
+    divisor = col_m.number_input("Módulo / Divisor (m):", min_value=1, value=5)
+    
+    if st.button("Calcular Módulo"):
+        res, coc, explic = operacion_modulo_explicada(dividendo, divisor)
+        st.success(f"**Resultado:** {dividendo} mod {divisor} = {res}")
+        st.markdown(f"""
+        * **Desglose del Teorema del Resto:** $a = q \\cdot m + r$
+        * En este caso: **{dividendo} = {divisor} × {coc} + {res}**
+        * **Congruencia:** Decimos que dos números son congruentes módulo $m$ ($a \\equiv b \\pmod m$) si dejan el mismo residuo al dividirse por $m$. Por ejemplo: ${dividendo} \\equiv {res} \\pmod{{{divisor}}}$.
+        """)
+
+st.markdown("---")
+with st.expander("🎓 ¿Qué conceptos estoy aprendiendo en este módulo?"):
+    st.markdown("""
+    * **Divisibilidad y Estructuras Discretas:** La divisibilidad establece relaciones de equivalencia en el conjunto de los enteros $\\mathbb{Z}$.
+    * **Algoritmo de Euclides:** Es uno de los algoritmos formales más antiguos de la humanidad ($O(\\log(\\min(a, b)))$).
+    * **Aritmética Modular ($\\mathbb{Z}_m$):** El concepto de residuo cíclico es la base de los autómatas finitos que reconocen propiedades numéricas y de toda la criptografía clásica y moderna.
+    """)

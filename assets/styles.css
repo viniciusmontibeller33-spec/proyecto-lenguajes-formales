@@ -1,0 +1,47 @@
+/* Estilos generales para StringLab - Paleta Celeste y Blanco */
+
+:root {
+    --primary-color: #0284c7;
+    --primary-light: #e0f2fe;
+    --primary-hover: #0369a1;
+    --text-dark: #0f172a;
+    --text-muted: #475569;
+    --bg-card: #ffffff;
+    --border-card: #bae6fd;
+}
+
+/* Encabezados y títulos */
+h1, h2, h3 {
+    color: #0369a1 !important;
+    font-weight: 700;
+}
+
+/* Tarjetas de contenido */
+.card-box {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(2, 132, 199, 0.06);
+}
+
+/* Resaltado de pasos y conceptos */
+.step-highlight {
+    background-color: #f0f9ff;
+    border-left: 4px solid var(--primary-color);
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Badges educativos */
+.badge-edu {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}

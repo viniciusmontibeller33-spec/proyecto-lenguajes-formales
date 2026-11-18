@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from logic.cifrado import cifrar_cesar_paso_a_paso, descifrar_cesar_paso_a_paso, obtener_alfabeto_desplazado
 
-st.set_page_config(page_title="Módulo D: Cifrado Educativo | StringLab", layout="wide")
+st.set_page_config(page_title="Cifrado Educativo | StringLab", layout="wide")
 
 # Cargar estilos visuales
 try:
@@ -11,7 +11,7 @@ try:
 except Exception:
     pass
 
-st.title("Módulo D: Cifrado Educativo (César Modular)")
+st.title("Cifrado Educativo (César Modular)")
 st.caption("Aprende cómo la aritmética modular transforma caracteres en el cifrado clásico de sustitución.")
 st.markdown("---")
 

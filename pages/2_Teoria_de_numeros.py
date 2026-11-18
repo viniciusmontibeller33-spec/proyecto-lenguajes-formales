@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from logic.teoria_numeros import es_primo_paso_a_paso, mcd_euclides_paso_a_paso, mcm_con_explicacion, operacion_modulo_explicada, verificar_congruencia
 
-st.set_page_config(page_title="Módulo B: Teoría de Números | StringLab", layout="wide")
+st.set_page_config(page_title="Teoría de Números | StringLab", layout="wide")
 
 # Cargar estilos visuales
 try:
@@ -11,7 +11,7 @@ try:
 except Exception:
     pass
 
-st.title("Módulo B: Laboratorio de Teoría de Números")
+st.title("Laboratorio de Teoría de Números")
 st.caption("Operaciones fundamentales paso a paso: números primos, Algoritmo de Euclides, MCM y aritmética modular.")
 st.markdown("---")
 

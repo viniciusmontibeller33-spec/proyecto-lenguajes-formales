@@ -4,7 +4,7 @@ import time
 from logic.automatas import afd_termina_01, afd_divisible_3, decimal_a_binario_info
 
 st.set_page_config(
-    page_title="Módulo C: Simulador de Autómatas | StringLab",
+    page_title="Simulador de Autómatas | StringLab",
     layout="wide"
 )
 
@@ -15,7 +15,7 @@ try:
 except Exception:
     pass
 
-st.title("Módulo C: Simulador de Autómatas Finitos (AFD)")
+st.title("Simulador de Autómatas Finitos (AFD)")
 st.caption("Visualización interactiva, seguimiento paso a paso y análisis formal de Autómatas Finitos Deterministas.")
 st.markdown("---")
 

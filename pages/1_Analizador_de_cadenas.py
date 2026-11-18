@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from logic.cadenas import analizar_cadena, verificar_palindromo, buscar_subcadena
 
-st.set_page_config(page_title="Módulo A: Analizador de Cadenas | StringLab", layout="wide")
+st.set_page_config(page_title="Analizador de Cadenas | StringLab", layout="wide")
 
 # Cargar estilos visuales
 try:
@@ -11,7 +11,7 @@ try:
 except Exception:
     pass
 
-st.title("Módulo A: Analizador de Cadenas")
+st.title("Analizador de Cadenas")
 st.caption("Herramienta interactiva para inspección de texto, conteo sintáctico, detección paso a paso de palíndromos y localización de patrones.")
 st.markdown("---")
 

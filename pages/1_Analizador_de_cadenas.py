@@ -1,12 +1,19 @@
 import streamlit as st
 import pandas as pd
-from logic.cadenas import analizar_cadena, es_palindromo, buscar_subcadena
+from logic.cadenas import analizar_cadena, verificar_palindromo, buscar_subcadena, frecuencia_caracteres
 
 st.set_page_config(page_title="Módulo A: Analizador de Cadenas | StringLab", page_icon="🔤", layout="wide")
 
+# Cargar estilos visuales
+try:
+    with open("assets/styles.css", "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except Exception:
+    pass
+
 st.title("🔤 Módulo A: Analizador de Cadenas")
 st.markdown("**Responsable:** Sergio (`rama: sergio`)")
-st.caption("Herramienta interactiva para inspección de texto, conteo sintáctico, detección de palíndromos y localización de patrones.")
+st.caption("Herramienta interactiva para inspección de texto, conteo sintáctico, detección paso a paso de palíndromos y localización de patrones.")
 st.markdown("---")
 
 texto_ejemplo = "La ruta natural nos dio otro camino"
@@ -32,32 +39,45 @@ if entrada:
     col_izq, col_der = st.columns(2)
     
     with col_izq:
-        st.subheader("🔄 Verificación de Palíndromo")
-        es_pal, limpio, invertido = es_palindromo(entrada)
-        if es_pal:
+        st.subheader("🔄 Verificación de Palíndromo Paso a Paso")
+        res_pal = verificar_palindromo(entrada)
+        
+        if not res_pal["evaluable"]:
+            st.info("ℹ️ La cadena no contiene letras ni dígitos evaluables para determinar si es palíndromo.")
+        elif res_pal["es_palindromo"]:
             st.success("✅ ¡La cadena es un palíndromo!")
         else:
             st.warning("❌ La cadena NO es un palíndromo.")
             
         st.markdown(f"""
-        * **Texto normalizado:** `{limpio}`
-        * **Texto invertido:** `{invertido}`
-        * *Nota:* Para la comprobación de palíndromos se ignoran mayúsculas, espacios, signos de puntuación y tildes.
+        * **Texto normalizado:** `{res_pal['normalizado']}`
+        * **Texto invertido:** `{res_pal['invertido']}`
+        * *Nota pedagógica:* Se ignoran mayúsculas, espacios y signos de puntuación según la definición formal.
         """)
+        
+        if res_pal["pasos"]:
+            st.write("**Procedimiento de comparación paso a paso (dos punteros):**")
+            df_pasos_pal = pd.DataFrame(res_pal["pasos"])
+            st.dataframe(df_pasos_pal, hide_index=True, use_container_width=True)
         
     with col_der:
         st.subheader("🔍 Búsqueda de Subcadenas")
         subcadena = st.text_input("Ingresa una subcadena a buscar:", value="ruta")
         if subcadena:
-            coincidencias = buscar_subcadena(entrada, subcadena)
-            if coincidencias:
-                st.success(f"Se encontraron **{len(coincidencias)}** coincidencia(s) en las posiciones (índice 0): `{coincidencias}`")
+            res_busqueda = buscar_subcadena(entrada, subcadena)
+            posiciones = res_busqueda.get("posiciones", [])
+            ocurrencias = res_busqueda.get("ocurrencias", len(posiciones))
+            comparaciones = res_busqueda.get("comparaciones", 0)
+            
+            if ocurrencias > 0:
+                st.success(f"Se encontraron **{ocurrencias}** coincidencia(s) en las posiciones (índice 0): `{posiciones}`")
+                st.caption(f"Comparaciones de caracteres realizadas: **{comparaciones}**")
                 
-                # Resaltado visual básico
+                # Resaltado visual de coincidencias
                 texto_resaltado = entrada.replace(subcadena, f"**:blue-background[{subcadena}]**")
                 st.markdown(f"**Vista con coincidencias:**\n\n{texto_resaltado}")
             else:
-                st.info(f"No se encontró la subcadena '{subcadena}' en el texto.")
+                st.info(f"No se encontró la subcadena '{subcadena}' en el texto. (Se realizaron {comparaciones} comparaciones).")
 
     st.markdown("---")
     st.subheader("📈 Frecuencia de Caracteres")
@@ -69,6 +89,6 @@ with st.expander("🎓 ¿Qué conceptos estoy aprendiendo en este módulo?"):
     st.markdown("""
     * **Alfabetos ($\Sigma$) y Cadenas ($w$):** En ciencias de la computación, un texto es una palabra formal compuesta por una secuencia finita de símbolos tomados de un alfabeto.
     * **Longitud de una cadena ($|w|$):** Representa el número de símbolos. Aquí exploramos la diferencia entre considerar o no el símbolo blanco/espacio.
-    * **Prefijos, Sufijos y Subcadenas:** La búsqueda de patrones busca localizar si una subcadena $v$ existe tal que $w = xvy$.
-    * **Simetría e Inversión ($w^R$):** Un palíndromo formal cumple que $w = w^R$, base de lenguajes libres de contexto generados por gramáticas con reglas como $S \to aSa \mid bSb \mid \epsilon$.
+    * **Búsqueda de Patrones y Complejidad:** La búsqueda directa recorre la cadena comprobando coincidencias carácter a carácter, con una cota de comparaciones de $O(|w| \\cdot |v|)$.
+    * **Simetría e Inversión ($w^R$):** Un palíndromo formal cumple que $w = w^R$, base fundamental de los lenguajes libres de contexto (Chomsky Tipo 2) no reconocibles por autómatas finitos debido a que requieren memoria infinita tipo pila.
     """)
